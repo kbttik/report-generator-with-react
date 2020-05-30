@@ -24,3 +24,9 @@ cd html-reporter
 npm start
 ```
 
+* build:静的ページの生成
+  * これをapache or nginxで覗かせるかなー
+```
+npm run build
+```
+
