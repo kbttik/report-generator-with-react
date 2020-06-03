@@ -28,15 +28,33 @@ docker build -t reporter-nginx:0.0 -f Docker/Dockerfile-nginx .
 * reactでbuildしたフォルダとreportのフォルダを覗かせる
   * <path>はgitのフォルダを指定
 ```
-docker run --rm -v <PATH>/report-generator-with-react/html-reporter/build:/usr/share/nginx/html -v <PATH>/report-generator-with-react/report:/mnt/report -p 8991:80 reporter-nginx:0.0
+docker run --rm -v <PATH>/report-generator-with-react/react-reporter/build:/usr/share/nginx/html -v <PATH>/report-generator-with-react/report:/mnt/report -p 8991:80 reporter-nginx:0.0
 ```
 
+## httpd(apache)
+* `Docker/Dockerfile-httpd`からのbuild
+```
+docker build -t reporter-httpd:0.0 -f Docker/Dockerfile-httpd .
+```
+
+* reactでbuildしたフォルダとreportのフォルダを覗かせる
+  * <path>はgitのフォルダを指定
+```
+docker run --rm -v <PATH>/report-generator-with-react/react-reporter/build:/usr/share/ -v <PATH>/report-generator-with-react/report:/mnt/report -p 8991:80 reporter-nginx:0.0
+```
 
 
 # react app
+* appの生成(npx: 最新だとこっちみたい。nodeとnpmのversion upが必要)
+  * `npm create-react-app`と比べて、設定ファイルが増えている
+  * `public/manifest.json`はホーム画面へ追加する際に、より細かな指定をするための記述
+```
+npx create-react-app react-reporter
+```
+
 * appの起動(デフォルトだと3000)
 ```
-cd html-reporter
+cd react-reporter
 npm start
 ```
 
