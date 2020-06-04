@@ -1,5 +1,5 @@
 # report-generator-with-react
-* R/Pythonで生成したhtmlを管理するSPAを作成するコンテナ+app
+* R/Pythonで生成したhtmlを管理するSPAを作成するコンテナ(Docker使用)+app
 
 
 # コンテナ
@@ -7,7 +7,7 @@
 ## react
 * `Docker/Dockerfile`からのbuild
 ```
-docker build -t reporter-react:0.0 -f Docker/Dockerfile .
+docker build -t reporter-react:0.0 -f Docker/react/Dockerfile .
 ```
 
 * 作成した`reporter-react:<tag>`で実行
@@ -22,7 +22,7 @@ docker run -it -v <path>/report-generator-with-react/:/home/repo -p 8990:3000 --
 ## nginx
 * `Docker/Dockerfile-nginx`からのbuild
 ```
-docker build -t reporter-nginx:0.0 -f Docker/Dockerfile-nginx .
+docker build -t reporter-nginx:0.0 -f Docker/nginx/Dockerfile .
 ```
 
 * reactでbuildしたフォルダとreportのフォルダを覗かせる
@@ -34,7 +34,7 @@ docker run --rm -v <PATH>/report-generator-with-react/react-reporter/build:/usr/
 ## httpd(apache)
 * `Docker/Dockerfile-httpd`からのbuild
 ```
-docker build -t reporter-httpd:0.0 -f Docker/Dockerfile-httpd .
+docker build -t reporter-httpd:0.0 -f Docker/httpd/Dockerfile .
 ```
 
 * reactでbuildしたフォルダとreportのフォルダを覗かせる
@@ -43,6 +43,17 @@ docker build -t reporter-httpd:0.0 -f Docker/Dockerfile-httpd .
 docker run --rm -v <PATH>/report-generator-with-react/react-reporter/build:/usr/share/ -v <PATH>/report-generator-with-react/report:/mnt/report -p 8991:80 reporter-nginx:0.0
 ```
 
+## MySQL
+* 
+```
+docker run --rm --name reporter-mysql -e MYSQL_ROOT_PASSWORD=mysql -p 8992:3306 -d -it mysql:8.0.20
+mysql -u root -p -h localhost -P 8992 --protocol=tcp
+
+create table maps (name varchar(50), url varchar(100));
+insert into maps values("test_rmarkdown", "http://localhost:8991/report/test_rmarkdown.html");
+```
+
+---
 
 # react app
 * appの生成(npx: 最新だとこっちみたい。nodeとnpmのversion upが必要)
@@ -63,6 +74,8 @@ npm start
 ```
 npm run build
 ```
+
+---
 
 # nginxで公開
 * 例えば、これでアクセスできる

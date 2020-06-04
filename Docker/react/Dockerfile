@@ -11,3 +11,5 @@ RUN npm install -g n
 RUN n stable
 RUN npm update -g npm
 RUN npm install -g create-react-app
+
+# react package
