@@ -1,35 +1,45 @@
 # report-generator-with-react
 * R/Pythonで生成したhtmlを管理するSPAを作成するコンテナ(Docker使用)+app
-
+* Flask or react でPOSTされるhtmlの受け口を作る -> 将来的にはshinyで作りたい
 
 # コンテナ
 
+:!: この作業は、`report-generator-with-react`での作業
+
 ## react
+### build
 * `Docker/Dockerfile`からのbuild
 ```
 docker build -t reporter-react:0.0 -f Docker/react/Dockerfile .
 ```
 
+### run
 * 作成した`reporter-react:<tag>`で実行
   * `-it`: フォワードで、ターミナル起動
   * `--rm`: コンテナが終了後削除
   * `-v <path>/report-generator-with-react/:/home/repo`: /home/repoにこのレポジトリをマウント(<path>はgitのフォルダを指定)
   * `-p 8990:3000`: 端末の8990をコンテナの3000にポートフォワード
 ```
-docker run -it -v <path>/report-generator-with-react/:/home/repo -p 8990:3000 --rm reporter-react:0.0 /bin/bash
+docker run -it -v $PWD:/home/repo -p 8990:3000 --rm reporter-react:0.0 /bin/bash
+```
+* docker-composeでの実行
+```
+docker-compose -f Docker/react/docker-compose.yml up -d
 ```
 
 ## nginx
+### build
 * `Docker/Dockerfile-nginx`からのbuild
 ```
 docker build -t reporter-nginx:0.0 -f Docker/nginx/Dockerfile .
 ```
 
+### run
 * reactでbuildしたフォルダとreportのフォルダを覗かせる
-  * <path>はgitのフォルダを指定
 ```
-docker run --rm -v <PATH>/report-generator-with-react/react-reporter/build:/usr/share/nginx/html -v <PATH>/report-generator-with-react/report:/mnt/report -p 8991:80 reporter-nginx:0.0
+docker run --rm -v $PWD/react-reporter/build:/usr/share/nginx/html -v $PWD/report:/mnt/report --name nginx-reporter -p 8991:80 reporter-nginx:0.0
 ```
+
 
 ## httpd(apache)
 * `Docker/Dockerfile-httpd`からのbuild
@@ -44,7 +54,7 @@ docker run --rm -v <PATH>/report-generator-with-react/react-reporter/build:/usr/
 ```
 
 ## MySQL
-* 
+* レポートのタグを保存する
 ```
 docker run --rm --name reporter-mysql -e MYSQL_ROOT_PASSWORD=mysql -p 8992:3306 -d -it mysql:8.0.20
 mysql -u root -p -h localhost -P 8992 --protocol=tcp
@@ -82,3 +92,4 @@ npm run build
 ```
 http://localhost:8991/report/test_rmarkdown.html
 ```
+

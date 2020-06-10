@@ -1,0 +1,13 @@
+version: '3'
+services:
+  reporter:
+    image: reporter-react:0.0
+    container_name: react-reporter
+    hostname: react
+    restart: always
+    volumes: 
+      - $PWD/react-reporter:/mnt/react-reporter
+      - $PWD/report:/mnt/report
+    ports: 
+      - 8990:3000
+    tty: true

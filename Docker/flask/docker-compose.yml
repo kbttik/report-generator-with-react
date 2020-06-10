@@ -1,0 +1,12 @@
+version: '3'
+services:
+  ingester:
+    build: .
+    image: 
+    container_name: ingester
+    hostname: python_ingester
+    restart: always
+    volumes:
+      - /mnt/data/:/mnt/data
+    network_mode: "host"
+    tty: true
