@@ -4,7 +4,7 @@
 
 # コンテナ
 
-:!: この作業は、`report-generator-with-react`での作業
+**この作業は、`report-generator-with-react`での作業**
 
 ## react
 ### build
@@ -61,6 +61,12 @@ mysql -u root -p -h localhost -P 8992 --protocol=tcp
 
 create table maps (name varchar(50), url varchar(100));
 insert into maps values("test_rmarkdown", "http://localhost:8991/report/test_rmarkdown.html");
+```
+
+## Flask
+* POSTを受け取る
+```
+docker build -t reporter-flask:0.0 -f Docker/flask/Dockerfile .
 ```
 
 ---

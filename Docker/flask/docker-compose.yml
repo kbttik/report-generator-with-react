@@ -1,12 +1,14 @@
 version: '3'
 services:
-  ingester:
-    build: .
-    image: 
-    container_name: ingester
-    hostname: python_ingester
+  reporter:
+    image: reporter-flask:0.0
+    container_name: flask-reporter
+    hostname: flask
     restart: always
-    volumes:
-      - /mnt/data/:/mnt/data
-    network_mode: "host"
+    volumes: 
+      - $PWD/react-reporter:/mnt/react-reporter
+      - $PWD/flask-receiver:/mnt/flask-receiver
+      - $PWD/report:/mnt/report
+    ports: 
+      - 8994:5000
     tty: true
