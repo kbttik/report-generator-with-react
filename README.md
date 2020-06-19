@@ -1,6 +1,7 @@
 # report-generator-with-react
 * R/Pythonで生成したhtmlを管理するSPAを作成するコンテナ(Docker使用)+app
 * Flask or react でPOSTされるhtmlの受け口を作る -> 将来的にはshinyで作りたい
+* 雑なメモ: https://hackmd.io/crhgugtYTouUUFKa5qJ7hg
 
 # コンテナ
 
@@ -62,9 +63,32 @@ mysql -u root -p -h localhost -P 8992 --protocol=tcp
 create table maps (name varchar(50), url varchar(100));
 insert into maps values("test_rmarkdown", "http://localhost:8991/report/test_rmarkdown.html");
 ```
+* docker-composeで行う(成功済み)
+```
+docker-compose -f Docker/mysql/docker-compose.yml up --build
+```
+* docker-compose内で以下のように設定したので、mysqlコンテナ内のデータは、/mysql/dataに保存される
+```
+    volumes: 
+      - $PWD/mysql/data:/var/lib/mysql
+```
+```
+(base) ➜  report-generator-with-react git:(master) ✗ tree mysql -d 2  
+mysql
+├── conf
+├── data
+│   ├── #innodb_temp
+│   ├── mysql
+│   ├── performance_schema
+│   ├── reporter
+│   └── sys
+└── init
+```
+
+
 
 ## Flask
-* POSTを受け取る
+* POSTを受け取る > mysqlに必要なデータを保存 + htmlレポート復元
 ```
 docker build -t reporter-flask:0.0 -f Docker/flask/Dockerfile .
 ```
@@ -97,5 +121,12 @@ npm run build
 * 例えば、これでアクセスできる
 ```
 http://localhost:8991/report/test_rmarkdown.html
+```
+
+
+# mysqlに接続
+* localhostだと探せない
+```
+mysql -u root -h 127.0.0.1 -P 8993 -p
 ```
 

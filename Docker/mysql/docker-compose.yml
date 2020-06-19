@@ -1,0 +1,19 @@
+version: '3'
+services:
+  reporter:
+    build:
+      context: $PWD
+      dockerfile: $PWD/Docker/mysql/Dockerfile
+    image: reporter-mysql:0.0
+    container_name: mysql-reporter
+    hostname: mysql
+    restart: always
+    volumes: 
+      - $PWD/mysql/conf/:/etc/mysql/conf.d
+      - $PWD/mysql/init:/docker-entrypoint-initdb.d
+      - $PWD/mysql/data:/var/lib/mysql
+      - $PWD/react-reporter:/mnt/react-reporter
+      - $PWD/report:/mnt/report
+    ports:
+      - 8993:3306
+    tty: true
