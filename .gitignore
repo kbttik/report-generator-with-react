@@ -4,3 +4,5 @@
 mysql/data
 .DS_Store
 *.RData
+__pycache__
+*.pyc

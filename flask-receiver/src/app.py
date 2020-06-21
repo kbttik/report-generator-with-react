@@ -19,9 +19,20 @@ def index():
 def print_data():
     pdb.set_trace()
     #print(request.get_data())
-    #f = open('/mnt/flask-receiver/reports/test_from.html', "w")
-    #f.write(request.get_data(as_text=True))
-    #f.close()
+    f = open('/mnt/flask-receiver/reports/test_from.html', "w")
+    f.write(request.get_data(as_text=True))
+    f.close()
+
+    # add to reports table
+    db.session.add(Report(request.headers['Title'], 'http://localhost:8991/report/test_rmarkdown.html'))
+    db.session.commit()
+
+    # add to tags table
+    id_new = db.session.query(db.func.max(Report.id)).scalar()
+    for tag in request.headers['Tags'].split(','):
+        db.session.add(Tag(id_new, tag))
+    db.session.commit()
+
     return "success!"
 
 if __name__ == "__main__":
