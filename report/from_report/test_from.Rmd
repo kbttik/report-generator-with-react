@@ -1,9 +1,11 @@
 ---
-title: "testest"
+title: "test_report(テストレポート)"
 author: "Taiki Kubota"
 date: "6/11/2020"
 output: html_document
 ---
+
+* 日本語も送れるかテストしたい
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)

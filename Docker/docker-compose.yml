@@ -1,0 +1,48 @@
+version: '3'
+services:
+  receiver:
+    build:
+      context: $PWD
+      dockerfile: $PWD/Docker/flask/Dockerfile
+    image: reporter-flask:0.0
+    container_name: flask-reporter
+    hostname: flask
+    restart: always
+    volumes: 
+      - $PWD/react-reporter:/mnt/react-reporter
+      - $PWD/flask-receiver:/mnt/flask-receiver
+      - $PWD/report:/mnt/report
+    environment:
+      TZ: Asia/Tokyo
+      FLASK_APP: /mnt/flask-receiver/src/app.py
+    ports: 
+      - 8994:5000
+    tty: true
+    depends_on: 
+      - database
+    networks:
+      - reporter_nw
+
+  database:
+    build:
+      context: $PWD
+      dockerfile: $PWD/Docker/mysql/Dockerfile
+    image: reporter-mysql:0.0
+    container_name: mysql-reporter
+    hostname: mysql
+    restart: always
+    volumes: 
+      - $PWD/mysql/conf/:/etc/mysql/conf.d
+      - $PWD/mysql/init:/docker-entrypoint-initdb.d
+      - $PWD/mysql/data:/var/lib/mysql
+      - $PWD/react-reporter:/mnt/react-reporter
+      - $PWD/report:/mnt/report
+    ports:
+      - 8993:3306
+    tty: true
+    networks:
+      - reporter_nw
+
+networks:
+  reporter_nw:
+    driver: bridge

@@ -86,16 +86,22 @@ mysql
 ```
 
 
-
 ## Flask
 * POSTを受け取る > mysqlに必要なデータを保存 + htmlレポート復元
 ```
 docker build -t reporter-flask:0.0 -f Docker/flask/Dockerfile .
 ```
 
+## docker-compose.ymlにまとめる
+```
+docker-compose -f Docker/docker-compose.yml up -d --build
+```
+
 ---
 
-# react app
+# アプリケーション
+
+## react app
 * appの生成(npx: 最新だとこっちみたい。nodeとnpmのversion upが必要)
   * `npm create-react-app`と比べて、設定ファイルが増えている
   * `public/manifest.json`はホーム画面へ追加する際に、より細かな指定をするための記述
@@ -115,16 +121,18 @@ npm start
 npm run build
 ```
 
----
+## flaskで受け取る
 
-# nginxで公開
+
+## nginxで公開
 * 例えば、これでアクセスできる
 ```
 http://localhost:8991/report/test_rmarkdown.html
 ```
 
 
-# mysqlに接続
+
+## mysqlに接続
 * localhostだと探せない
 ```
 mysql -u root -h 127.0.0.1 -P 8993 -p

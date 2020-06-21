@@ -1,6 +1,9 @@
 version: '3'
 services:
   reporter:
+    build:
+      context: $PWD
+      dockerfile: $PWD/Docker/flask/Dockerfile
     image: reporter-flask:0.0
     container_name: flask-reporter
     hostname: flask
